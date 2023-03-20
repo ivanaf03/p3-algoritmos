@@ -1,0 +1,156 @@
+	TÍTULO: Práctica 3 de Algoritmos: Árboles  |
+___________________________________________________|_______________________
+	AUTOR:Iván Álvarez Fernandez        LOGIN 1:ivan.alvarez.fernandez |
+	AUTOR:Marcos Gómez Tejón	    LOGIN 2:m.tejon 		   |
+___________________________________________________________________________|
+	GRUPO: 1.4  	 |
+-------------------------|
+        FECHA: 23/09/2022|
+________________________/
+
+
+__________________________________________
+	CARACTERÍSTICAS DEL PROCESADOR: //
+---------------------------------------//
+ Intel Core i7-10750H CPU @2.60 GHz x 12
+ Max Freq:   5.00 GHz
+ Cores:  6 cores 
+
+
+______________________________________
+	CARACTERÍSTICAS DEL EQUIPO: //
+-----------------------------------//
+ OS: Ubuntu 22.04
+ Memoria RAM: 16,0 GiB
+ GPU: llvmpipe (LLVM 13.0.1, 256 bits) / Mesa Intel® UHD Graphics (CML GT2)
+ Arquitectura: 64 bits 
+
+____________________________________________________
+	INTRODUCCIÓN E DESCRIPCIÓN DE LA PRÁCTICA: / 
+--------------------------------------------------/
+
+En esta práctica se nos pide que implementemos el código dado (además de
+validar su comportamiento) y que estudiemos empíricamente la complejidad
+computacional de las operaciones insertar y buscar en árboles binarios
+de búsqueda de números enteros además de contar con un campo con la 
+frecuencia deapariciones.
+
+Se nos pide que para distintos valores de n, determinemos el tiempo que se
+tarda en insertar n números enteros aleatorios en el rango [−n, + n] en un
+árbol vacío; y, seguidamente el tiempo de búsqueda de otros n números 
+enteros aleatorios en el rango [−n, + n] en ese árbol con n elementos.
+Y que calculemos empíricamente la complejidad computacional de las
+“n inserciones” y las “n búsquedas”.
+
+______________________________________    
+	TEST:                	     /
+------------------------------------/
+
+()
+Inserto 3-1-2-5-4-5
+ (  ( 1 ( 2 )  ) 3 (  ( 4 ) 5 )  ) 
+La altura es 2
+Busco 3-1-2-5-4-5
+Busco 1 y encuentro 1
+1 esta repetido 1 veces
+Busco 2 y encuentro 2
+2 esta repetido 1 veces
+Busco 3 y encuentro 3
+3 esta repetido 1 veces
+Busco 4 y encuentro 4
+4 esta repetido 1 veces
+Busco 5 y encuentro 5
+5 esta repetido 2 veces
+Busco 6 y no encuentro nada
+()
+
+
+______________________________________    
+	MEDICIÓN DE TIEMPOS:  	     /
+------------------------------------/
+
+(*) Los tiempos se miden en microsegundos
+		
+		     TIEMPOS
+
+        1000	      89.000	      92.000
+        2000	     268.000	     206.000
+        4000	     418.000	     471.000
+        8000	    1004.000	    1179.000
+       16000	    2478.000	    2853.000
+       32000	    6462.000	    7229.000
+       64000	   15919.000	   17779.000
+      128000	   37109.000	   40729.000
+      256000	   86438.000	   92994.000
+
+----------INSERCIÓN---------------------------------------------------------
+------------
+COMPLEJIDAD/
+------------------------------|		
+Cota subestimada: O(n^1.12)   |
+Cota ajustada: O(n^1.26)      |
+Cota sobrestimada: O(n^1.5)   |	
+
+	  n  	      t(n)	   Subestimada	   Ajustada	Sobrestimada
+
+        1000		-		-		-		-
+        2000		-		-		-		-
+        4000		-		-		-		-
+        8000       1004.000        0.042685        0.012129        0.001403
+       16000       2478.000        0.048472        0.012500        0.001224
+       32000       6462.000        0.058157        0.013611        0.001129
+       64000      15919.000        0.065917        0.014000        0.000983
+      128000      37109.000        0.070698        0.013627        0.000810
+      256000      86438.000        0.075766        0.013253        0.000667
+
+La cota ajustada tiende a 0.13
+
+----------BÚSQUEDA----------------------------------------------------------
+------------
+COMPLEJIDAD/
+------------------------------|		
+Cota subestimada: O(n^1.12)   |
+Cota ajustada: O(n^1.28)      |
+Cota sobrestimada: O(n^1.5)   |	
+
+	  n  	      t(n)	   Subestimada	   Ajustada	Sobrestimada
+
+        1000		-		-		-		-
+        2000		-		-		-		-
+        4000		-		-		-		-
+        8000       1179.000        0.050125        0.011900        0.001648
+       16000       2853.000        0.055807        0.011858        0.001410
+       32000       7229.000        0.065059        0.012373        0.001263
+       64000      17779.000        0.073618        0.012531        0.001098
+      128000      40729.000        0.077594        0.011822        0.000889
+      256000      92994.000        0.081513        0.011115        0.000718
+
+La cota ajustada tiende a 0.11
+
+(*) En esta práctica, ignoramos los tiempos menos a 500 microsegundos para
+evitar complicaciones.Si hacemos el mismo proceso de siempre, repetir las
+inserciones en bucle k veces y luego las búsquedas, y dividir los tiempos
+entre k, las búsquedas siempre serían sobre el último árbol en el que se 
+insertó, lo cual no tendría muscho sentido. En su lugar habría que crear un
+vector de k arboles y hacer las inserciones y búsquedas en cada elemento del
+vector y luego dividir los tiempos entre k. En nuestro caso, hemos decidido 
+representar con un "-" los tiempos menos de 500 microsegundos, pero mostrar 
+la tabla igual, ya que en máquinas lentas si que podría mostrar resultados 
+para n=4000, por ejemplo, o incluso menores.
+______________________________________    
+	  CONCLUSIÓN:                /
+------------------------------------/
+
+La complejidad teórica de busqueda e inserción de un árbol coinciden. Va en 
+proporción a la altura del árbol. La complejidad es de O(log n) para los casos
+medios y O(n) para el peor caso (un árbol en forma de lista). Esto de debe a 
+que ambos siguen un algoritmo muy similar, empiezan a comparar el dato con los 
+elementos ya insertados en el árbol y según sea menor o mayor avanza hasta 
+encontrar el elemento en cuestión (si existe) o poder insertarlo. En nuestra 
+práctica, los tiempos de inserción son un poco menores porque empezamos 
+insertando en un árbol vacío y el árbol va creciendo a medida que se añaden 
+elementos. En el algoritmo de búsqueda ya partimos de un árbol con n elementos,
+por lo que la primera búsqueda puede tardar más, menos o igual que la última, 
+ya que estamos buscando datos aleatorios.
+
+
